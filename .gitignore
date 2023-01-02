@@ -1,0 +1,4 @@
+*.o
+*.tgz
+assets/
+spacegame
