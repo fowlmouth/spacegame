@@ -51,6 +51,8 @@ int Application::run()
     sf::Time elapsed = fps.restart();
     current_scene()->update(elapsed);
 
+    current_scene()->post_update(*this);
+
     window.clear(sf::Color::Black);
     current_scene()->render(window);
     window.display();

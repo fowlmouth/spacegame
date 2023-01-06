@@ -3,6 +3,8 @@
 #include <iostream>
 #include <math.h>
 
+#include <SFML/Graphics.hpp>
+
 
 namespace sg::ui
 {
@@ -19,6 +21,15 @@ void Label::render(sf::RenderTarget& target)
     update();
     update_bounds();
   }
+
+  sf::RectangleShape rect;
+  rect.setPosition(_global_bounds.left, _global_bounds.top);
+  rect.setSize({_global_bounds.width, _global_bounds.height});
+  rect.setFillColor(sf::Color::Transparent);
+  rect.setOutlineColor(sf::Color::White);
+  rect.setOutlineThickness(1.5f);
+  target.draw(rect);
+
   text.setPosition(_global_bounds.left, _global_bounds.top);
   target.draw(text);
 
