@@ -5,12 +5,25 @@ namespace sg::scenes
 
 const char* Pong::SCENE_NAME = "Pong";
 
+entt::entity create_paddle(entt::registry& reg)
+{
+  entt::entity ent = reg.create();
+
+  return ent;
+}
+
+entt::entity create_ball(entt::registry& reg)
+{
+  entt::entity ent = reg.create();
+
+  return ent;
+}
+
 Pong::Pong()
 {
-  ball = reg.create();
-
-  player = reg.create();
-
+  ball = create_ball(reg);
+  player1 = create_paddle(reg);
+  player2 = create_paddle(reg);
 }
 
 

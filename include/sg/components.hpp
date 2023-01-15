@@ -22,6 +22,9 @@ struct Mesh
   std::vector< sf::Vector2f > points;
 
   void set_circle(sf::Vector2f center, int point_count, float radius);
+  void set_radial_polygon(sf::Vector2f center, int point_count, float radius, float start_offset_radians);
+  void set_box(sf::Vector2f center, float width);
+  void set_rectangle(sf::Vector2f center, float width, float height);
 };
 
 struct Material

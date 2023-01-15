@@ -22,15 +22,16 @@ void Label::render(sf::RenderTarget& target)
     update_bounds();
   }
 
+  text.setPosition(_global_bounds.left, _global_bounds.top);
+
   sf::RectangleShape rect;
   rect.setPosition(_global_bounds.left, _global_bounds.top);
-  rect.setSize({_global_bounds.width, _global_bounds.height});
+  rect.setSize(sf::Vector2f(text.getGlobalBounds().width, text.getGlobalBounds().height)); // {_global_bounds.width, _global_bounds.height});
   rect.setFillColor(sf::Color::Transparent);
   rect.setOutlineColor(sf::Color::White);
   rect.setOutlineThickness(1.5f);
   target.draw(rect);
 
-  text.setPosition(_global_bounds.left, _global_bounds.top);
   target.draw(text);
 
   // std::cout << "render " << text.getString().toAnsiString() << std::endl
