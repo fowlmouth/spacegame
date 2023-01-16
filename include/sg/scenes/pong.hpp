@@ -10,7 +10,7 @@ namespace sg::scenes
 class Pong : public Scene
 {
   entt::registry reg;
-  entt::entity player, enemy, ball;
+  entt::entity player1, player2, ball;
 
 public:
   static const char* SCENE_NAME;

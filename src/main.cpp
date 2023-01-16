@@ -2,6 +2,7 @@
 #include "sg/scenes/main.hpp"
 #include "sg/scenes/pick-scene.hpp"
 #include "sg/scenes/snow.hpp"
+#include "sg/scenes/pong.hpp"
 #include "sg/scenes/intro.hpp"
 
 #include <iostream>
@@ -14,7 +15,8 @@ int main(int argc, const char** argv)
     auto main_scene = std::make_unique< sg::scenes::PickScene >();
     main_scene->register_scenes<
       sg::scenes::Main,
-      sg::scenes::Snow
+      sg::scenes::Snow,
+      sg::scenes::Pong
     >();
     app.push_scene(std::make_unique< sg::scenes::Intro >(
       sf::seconds(0.2f),

@@ -20,6 +20,7 @@ struct Velocity
 struct Mesh
 {
   std::vector< sf::Vector2f > points;
+  sf::Vector2f center;
 
   void set_circle(sf::Vector2f center, int point_count, float radius);
   void set_radial_polygon(sf::Vector2f center, int point_count, float radius, float start_offset_radians);
