@@ -1,6 +1,5 @@
 #include "sg/scenes/snow.hpp"
 #include "sg/components.hpp"
-#include "sg/application-interface.hpp"
 
 #include <iostream>
 #include <cmath>
@@ -119,7 +118,7 @@ Scene::EventResponse Snow::handle_event(const sf::Event& event)
   return Scene::EventResponse::Continue;
 }
 
-void Snow::pre_update(ApplicationInterface& app)
+void Snow::pre_update(Application& app)
 {
   if(should_snow())
   {
@@ -143,7 +142,7 @@ void Snow::pre_update(ApplicationInterface& app)
   }
 }
 
-void Snow::on_enter(ApplicationInterface& app)
+void Snow::on_enter(Application& app)
 {
   scene_start_time.restart();
   app.set_window_title("Merry Christmas!");

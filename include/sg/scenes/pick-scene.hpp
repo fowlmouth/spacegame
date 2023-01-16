@@ -9,6 +9,8 @@
 #include <vector>
 #include <functional>
 
+#include "../application.hpp"
+
 #include "entt/entt.hpp"
 
 namespace sg::scenes
@@ -59,9 +61,9 @@ public:
   void update(const sf::Time&) override;
   void render(sf::RenderTarget&) override;
 
-  void pre_update(ApplicationInterface&) override;
-  void post_update(ApplicationInterface&) override;
-  void on_enter(ApplicationInterface&) override;
+  void pre_update(Application&) override;
+  void post_update(Application&) override;
+  void on_enter(Application&) override;
 
   void schedule_scene(PickScene::SceneConstructor constructor);
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../scene.hpp"
+#include "../application.hpp"
 
 #include "entt/entt.hpp"
 
@@ -19,7 +20,7 @@ public:
   Intro(sf::Time time, std::unique_ptr<Scene>&& next_scene);
 
   Scene::EventResponse handle_event(const sf::Event&) override;
-  void pre_update(ApplicationInterface&) override;
+  void pre_update(Application&) override;
   void update(const sf::Time&) override;
   void render(sf::RenderTarget&) override;
 

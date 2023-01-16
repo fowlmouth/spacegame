@@ -1,5 +1,4 @@
 #include "sg/scene.hpp"
-#include "sg/application-interface.hpp"
 
 namespace sg
 {
@@ -8,19 +7,19 @@ Scene::~Scene()
 {
 }
 
-void Scene::pre_update(ApplicationInterface&)
+void Scene::pre_update(Application&)
 {
 }
-void Scene::post_update(ApplicationInterface&)
+void Scene::post_update(Application&)
 {
 }
-void Scene::post_render(ApplicationInterface&)
+void Scene::post_render(Application&)
 {
 }
-void Scene::on_enter(ApplicationInterface&)
+void Scene::on_enter(Application&)
 {
 }
-void Scene::on_leave(ApplicationInterface&)
+void Scene::on_leave(Application&)
 {
 }
 

@@ -6,7 +6,7 @@
 namespace sg
 {
 
-class ApplicationInterface;
+class Application;
 
 class Scene
 {
@@ -25,19 +25,19 @@ public:
   virtual void render(sf::RenderTarget&) = 0;
 
   // Called before each update phase
-  virtual void pre_update(ApplicationInterface&);
+  virtual void pre_update(Application&);
 
   // Called after each update phase
-  virtual void post_update(ApplicationInterface&);
+  virtual void post_update(Application&);
 
   // Called after each render phase
-  virtual void post_render(ApplicationInterface&);
+  virtual void post_render(Application&);
 
   // Called when the scene is entered
-  virtual void on_enter(ApplicationInterface&);
+  virtual void on_enter(Application&);
 
   // Called when the scene is left
-  virtual void on_leave(ApplicationInterface&);
+  virtual void on_leave(Application&);
 
 };
 }

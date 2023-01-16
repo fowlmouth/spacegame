@@ -1,14 +1,16 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "application-interface.hpp"
+// #include "application-interface.hpp"
 #include <memory>
 #include <stack>
 
 namespace sg
 {
 
-class Application : public ApplicationInterface
+class Scene;
+
+class Application // : public ApplicationInterface
 {
   sf::RenderWindow window;
   sf::Clock fps;
@@ -22,12 +24,12 @@ public:
 
   int run();
 
-  sf::Vector2u get_window_size() const override;
-  void set_window_size(sf::Vector2u) override;
-  void replace_scene(std::unique_ptr< Scene >&&) override;
-  void push_scene(std::unique_ptr< Scene >&&) override;
-  void pop_scene() override;
-  void set_window_title(const char* title) override;
+  sf::Vector2u get_window_size() const;
+  void set_window_size(sf::Vector2u);
+  void replace_scene(std::unique_ptr< Scene >&&);
+  void push_scene(std::unique_ptr< Scene >&&);
+  void pop_scene();
+  void set_window_title(const char* title);
 };
 
 }

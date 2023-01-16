@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../scene.hpp"
+#include "../application.hpp"
 
 #include "entt/entt.hpp"
 
@@ -37,8 +38,8 @@ public:
   void update(const sf::Time&) override;
   void render(sf::RenderTarget&) override;
 
-  void pre_update(ApplicationInterface&) override;
-  void on_enter(ApplicationInterface&) override;
+  void pre_update(Application&) override;
+  void on_enter(Application&) override;
 
 };
 

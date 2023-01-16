@@ -7,7 +7,7 @@ CXXFLAGS := -std=c++20 -Iinclude/ -Ientt/single_include $(shell pkg-config --cfl
 LDLIBS := $(shell pkg-config --libs sfml-graphics)
 
 ASSETS_TAR := spacegame-assets.tgz
-ASSETS_URL := "https://www.dropbox.com/s/kc992wfsj3xqdd7/spacegame-assets.tgz?dl=1"
+ASSETS_URL := "https://www.dropbox.com/s/6bjba6qzwlgs38b/spacegame-assets.tgz?dl=1"
 
 ALL: $(BIN)
 .PHONY: clean cleanall run xx

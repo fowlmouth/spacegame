@@ -1,5 +1,4 @@
 #include "sg/scenes/intro.hpp"
-#include "sg/application-interface.hpp"
 
 #include <iostream>
 
@@ -26,7 +25,7 @@ Scene::EventResponse Intro::handle_event(const sf::Event&)
   return Scene::EventResponse::Continue;
 }
 
-void Intro::pre_update(ApplicationInterface& app)
+void Intro::pre_update(Application& app)
 {
   if(scene_begin_time.getElapsedTime() >= scene_time)
   {

@@ -2,8 +2,6 @@
 #include "sg/scenes/pick-scene.hpp"
 #include "sg/components/relationships.hpp"
 
-#include "sg/application-interface.hpp"
-
 #include "sg/ui.hpp"
 
 #include <memory>
@@ -72,12 +70,12 @@ void PickScene::render(sf::RenderTarget& target)
   ui_root->render(target);
 }
 
-void PickScene::pre_update(ApplicationInterface&)
+void PickScene::pre_update(Application&)
 {
 
 }
 
-void PickScene::post_update(ApplicationInterface& app)
+void PickScene::post_update(Application& app)
 {
   if(next_scene)
   {
@@ -97,7 +95,7 @@ void PickScene::schedule_scene(PickScene::SceneConstructor constructor)
   next_scene = constructor;
 }
 
-void PickScene::on_enter(ApplicationInterface& app)
+void PickScene::on_enter(Application& app)
 {
   if(!ui_style)
   {
