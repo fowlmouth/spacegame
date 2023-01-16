@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-// #include "application-interface.hpp"
 #include <memory>
 #include <stack>
 
@@ -10,7 +9,7 @@ namespace sg
 
 class Scene;
 
-class Application // : public ApplicationInterface
+class Application
 {
   sf::RenderWindow window;
   sf::Clock fps;
