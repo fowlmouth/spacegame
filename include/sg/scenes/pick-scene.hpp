@@ -3,8 +3,9 @@
 #include "../scene.hpp"
 #include "../asset-cache.hpp"
 
-#include "../components/basic.hpp"
 #include "../ui.hpp"
+
+#include "../components.hpp"
 
 #include <vector>
 #include <functional>

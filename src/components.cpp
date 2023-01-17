@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-namespace sg
+namespace sg::components
 {
 
 void Mesh::set_circle(sf::Vector2f center, int point_count, float radius)

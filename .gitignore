@@ -2,3 +2,4 @@
 *.tgz
 assets/
 spacegame
+.DS_Store
