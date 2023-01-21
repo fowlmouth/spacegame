@@ -25,6 +25,7 @@ public:
   void update(const sf::Time&) override;
   void render(sf::RenderTarget&) override;
 
+  void pre_update(Application&) override;
   void on_enter(Application&) override;
 };
 

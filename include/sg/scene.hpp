@@ -21,14 +21,16 @@ public:
   };
 
   virtual EventResponse handle_event(const sf::Event&) = 0;
-  virtual void update(const sf::Time&) = 0;
-  virtual void render(sf::RenderTarget&) = 0;
 
   // Called before each update phase
   virtual void pre_update(Application&);
 
+  virtual void update(const sf::Time&) = 0;
+
   // Called after each update phase
   virtual void post_update(Application&);
+
+  virtual void render(sf::RenderTarget&) = 0;
 
   // Called after each render phase
   virtual void post_render(Application&);
