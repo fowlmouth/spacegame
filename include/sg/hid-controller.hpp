@@ -16,7 +16,7 @@ struct Button
 {
   enum ButtonType
   { 
-    None, Key, MouseButton
+    None, Key, MouseButton, MouseWheel
   };
 
   ButtonType type = None;
@@ -24,6 +24,8 @@ struct Button
 
   bool is_pressed() const;
 };
+
+
 
 struct ButtonValueMapper
 {
@@ -39,7 +41,8 @@ struct ButtonValueMapper
   void apply(void* input_state) const;
 };
 
-template< typename InputState >
+
+
 struct ControllerConfiguration
 {
   std::vector< ButtonValueMapper > actions;
@@ -50,12 +53,13 @@ struct ControllerConfiguration
   }
 };
 
+using ControllerConfigurationRef = std::shared_ptr< ControllerConfiguration >;
+
+
 template< typename InputState >
 struct Controller
 {
-  using Configuration = ControllerConfiguration< InputState >;
-  using ConfigurationRef = std::shared_ptr< Configuration >;
-  ConfigurationRef config;
+  ControllerConfigurationRef config;
 
   inline InputState& input_state(entt::registry& reg, entt::entity entity)
   {
@@ -67,13 +71,12 @@ template< typename InputState >
 struct ControllerManager
 {
   using ThisController = Controller< InputState >;
-  using ThisControllerConfigurationRef = typename ThisController::ConfigurationRef;
 
   struct EntityController
   {
     std::string name;
     entt::entity entity = entt::null;
-    ThisControllerConfigurationRef config;
+    ControllerConfigurationRef config;
   };
 
   std::vector< EntityController > controllers;

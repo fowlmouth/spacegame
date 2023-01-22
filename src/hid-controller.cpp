@@ -14,6 +14,8 @@ bool Button::is_pressed() const
   case MouseButton:
     result = sf::Mouse::isButtonPressed((sf::Mouse::Button)value);
     break;
+  case MouseWheel:
+    result = 
   default:
     break;
   }

@@ -17,7 +17,7 @@ struct PaddleInputState
 constexpr int PaddleMoveSpeed = 10000.f;
 
 using PaddleController = sg::hid::Controller< PaddleInputState >;
-using PaddleControllerConfiguration = PaddleController::Configuration;
+using PaddleControllerConfiguration = sg::hid::ControllerConfiguration;
 
 using PaddleControllerManager = sg::hid::ControllerManager< PaddleInputState >;
 
@@ -38,7 +38,32 @@ void create_paddle_controller_configurations(PaddleControllerManager& controller
     btn2.type = sg::hid::ButtonValueMapper::BoolToHighFloat;
     btn2.offset = offsetof(PaddleInputState, vertical_move);
 
-    controller_manager.controllers.push_back(PaddleControllerManager::EntityController{ "Keyboard", entt::null, kbd });
+    controller_manager.controllers.push_back(PaddleControllerManager::EntityController{ "Keyboard Right", entt::null, kbd });
+  }
+  {
+    auto kbd = std::make_shared< PaddleControllerConfiguration >(2);
+
+    auto& btn1 = kbd->actions.at(0);
+    btn1.button = sg::hid::Button{ sg::hid::Button::Key, sf::Keyboard::Key::Up };
+    btn1.type = sg::hid::ButtonValueMapper::BoolToLowFloat;
+    btn1.offset = offsetof(PaddleInputState, vertical_move);
+
+    auto& btn2 = kbd->actions.at(1);
+    btn2.button = sg::hid::Button{ sg::hid::Button::Key, sf::Keyboard::Key::Down };
+    btn2.type = sg::hid::ButtonValueMapper::BoolToHighFloat;
+    btn2.offset = offsetof(PaddleInputState, vertical_move);
+
+    controller_manager.controllers.push_back(PaddleControllerManager::EntityController{ "Keyboard Left", entt::null, kbd });
+  }
+  {
+    auto mwheel = std::make_shared< PaddleControllerConfiguration >(1);
+
+    auto& btn1 = mwheel->actions.at(0);
+    btn1.button = sg::hid::Button{ sg::hid::Button::MouseWheel, sf::Mouse::Wheel::VerticalWheel };
+    btn1.type = sg::hid::ButtonValueMapper::Float;
+    btn1.offset = offsetof(PaddleInputState, vertical_move);
+
+    controller_manager.controllers.push_back(PaddleControllerManager::EntityController{ "MouseWheel", entt::null, mwheel });
   }
 }
 
@@ -109,7 +134,7 @@ void Pong::on_enter(Application& app)
   reset_objects(reg, ball, player1, player2, app.get_window_size());
 
   auto& controller_manager = reg.ctx().get< PaddleControllerManager >();
-  if(!controller_manager.claim(0, reg, player1))
+  if(!controller_manager.claim(2, reg, player1))
   {
     std::cout << "Failed to claim a controller" << std::endl;
     throw fail{};
