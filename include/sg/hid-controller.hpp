@@ -54,7 +54,8 @@ template< typename InputState >
 struct Controller
 {
   using Configuration = ControllerConfiguration< InputState >;
-  std::shared_ptr< Configuration > config;
+  using ConfigurationRef = std::shared_ptr< Configuration >;
+  ConfigurationRef config;
 
   inline InputState& input_state(entt::registry& reg, entt::entity entity)
   {
@@ -66,13 +67,13 @@ template< typename InputState >
 struct ControllerManager
 {
   using ThisController = Controller< InputState >;
-  using ThisControllerConfiguration = ControllerConfiguration< InputState >;
+  using ThisControllerConfigurationRef = typename ThisController::ConfigurationRef;
 
   struct EntityController
   {
     std::string name;
     entt::entity entity = entt::null;
-    std::shared_ptr< ThisControllerConfiguration > config;
+    ThisControllerConfigurationRef config;
   };
 
   std::vector< EntityController > controllers;
