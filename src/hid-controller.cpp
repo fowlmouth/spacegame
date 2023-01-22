@@ -1,9 +1,32 @@
 #include "sg/hid-controller.hpp"
 
+#include <array>
+
 namespace sg::hid
 {
 
-bool Button::is_pressed() const
+float wheel_deltas[2] = {0, 0};
+
+void observeEvent(const sf::Event& event)
+{
+  switch(event.type)
+  {
+  case sf::Event::MouseWheelScrolled:
+    wheel_deltas[(int)event.mouseWheelScroll.wheel] = event.mouseWheelScroll.delta;
+    break;
+
+  default:
+    break;
+  }
+}
+
+void endFrame()
+{
+  wheel_deltas[0] = 0;
+  wheel_deltas[1] = 0;
+}
+
+bool Button::is_pressed(float& axis) const
 {
   bool result = false;
   switch(type)
@@ -15,7 +38,9 @@ bool Button::is_pressed() const
     result = sf::Mouse::isButtonPressed((sf::Mouse::Button)value);
     break;
   case MouseWheel:
-    result = 
+    result = (value >= 0 && value < 2) ? (wheel_deltas[value] != 0.0) : false;
+    axis = wheel_deltas[value];
+    break;
   default:
     break;
   }
@@ -25,7 +50,8 @@ bool Button::is_pressed() const
 void ButtonValueMapper::apply(void* input_state) const
 {
   bool boolean_value = false;
-  if(button.is_pressed())
+  float axis = 0.f;
+  if(button.is_pressed(axis))
   {
     boolean_value = true;
   }
@@ -59,6 +85,13 @@ void ButtonValueMapper::apply(void* input_state) const
 
   case ButtonValueMapper::None:
     break;
+
+  case ButtonValueMapper::Float:
+  {
+    float* val = (float*)((char*)input_state + offset);
+    *val = axis;
+    break;
+  }
 
   default:
     throw todo{};

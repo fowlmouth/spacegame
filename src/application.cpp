@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "sg/hid-controller.hpp"
+
 namespace sg
 {
 
@@ -28,6 +30,7 @@ int Application::run()
     sf::Event event;
     while(window.pollEvent(event))
     {
+      sg::hid::observeEvent(event);
       switch(event.type)
       {
       case sf::Event::Closed:
@@ -52,6 +55,7 @@ int Application::run()
     current_scene()->update(elapsed);
 
     current_scene()->post_update(*this);
+    sg::hid::endFrame();
 
     window.clear(sf::Color::Black);
     current_scene()->render(window);

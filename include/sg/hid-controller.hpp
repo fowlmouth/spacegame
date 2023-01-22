@@ -12,6 +12,9 @@ namespace sg::hid
 
 struct todo{};
 
+void observeEvent(const sf::Event&);
+void endFrame();
+
 struct Button
 {
   enum ButtonType
@@ -22,7 +25,7 @@ struct Button
   ButtonType type = None;
   int value;
 
-  bool is_pressed() const;
+  bool is_pressed(float& axis) const;
 };
 
 
