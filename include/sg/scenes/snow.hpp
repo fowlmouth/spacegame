@@ -3,6 +3,10 @@
 #include "../scene.hpp"
 #include "../application.hpp"
 
+#include "../debug-renderer.hpp"
+
+#include "../components/graphical.hpp"
+
 #include "entt/entt.hpp"
 
 #include <random>
@@ -23,6 +27,7 @@ class Snow : public ::sg::Scene
   sf::Clock scene_start_time;
   sf::Font background_text_font;
   sf::Text background_text;
+  DebugRenderer renderer;
 
   bool should_snow() const;
   void reset_snow_timer();

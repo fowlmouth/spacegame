@@ -4,23 +4,11 @@ namespace sg
 {
 
 
-
 #define RADIANS_TO_DEGREES(radians) (radians * 180.0 / M_PI)
 
 struct ShapeAdapter : public sf::Shape
 {
   const Mesh* mesh = nullptr;
-
-  // ShapeAdapter(const Transform& transform, const Material& material, const Mesh& mesh, float sine_offset, float sine_time)
-  // : mesh(&mesh)
-  // {
-  //   setPosition(transform.x + sine_offset * std::sin(sine_time), transform.y);
-  //   setRotation(RADIANS_TO_DEGREES(transform.radians));
-  //   setFillColor(material.fill_color);
-  //   setOutlineColor(material.outline_color);
-  //   setOutlineThickness(material.outline_thickness);
-  //   setTexture(material.texture.get(), true);
-  // }
 
   std::size_t getPointCount() const override
   {
@@ -34,26 +22,45 @@ struct ShapeAdapter : public sf::Shape
 };
 
 
-DebugRenderer::DebugRenderer(sf::RenderTarget& render_target)
-: target(render_target)
+DebugRenderer::DebugRenderer()
 {
+  default_material.fill_color = sf::Color(180,180,180,255);
+  default_material.outline_color = sf::Color::White;
+  default_material.outline_thickness = 1.2f;
 }
 
-void DebugRenderer::render(entt::registry& reg)
+void DebugRenderer::render(sf::RenderTarget& target, entt::registry& reg)
 {
-  auto view = reg.view< Transform, Material, Mesh >();
-  ShapeAdapter shape;
+  auto view = reg.view< Transform, Mesh >();
   for(auto ent : view)
   {
+    ShapeAdapter& shape = reg.get_or_emplace< ShapeAdapter >(ent);
     shape.mesh = & view.get< Mesh >(ent);
     const auto& transform = view.get< Transform >(ent);
     shape.setPosition(transform.x, transform.y);
     shape.setRotation(RADIANS_TO_DEGREES(transform.radians));
-    const auto& mat = view.get< Material >(ent);
-    shape.setFillColor(mat.fill_color);
-    shape.setOutlineColor(mat.outline_color);
-    shape.setOutlineThickness(mat.outline_thickness);
-    shape.setTexture(mat.texture.get(), true);
+    auto mat = reg.try_get< Material >(ent);
+    if(!mat)
+      mat = &default_material;
+    shape.setFillColor(mat->fill_color);
+    shape.setOutlineColor(mat->outline_color);
+    shape.setOutlineThickness(mat->outline_thickness);
+    shape.setTexture(mat->texture.get(), true);
+  }
+
+  auto view2 = reg.view< ShapeAdapter, components::VisualEffectQueue >();
+  float scene_time_seconds = scene_time.getElapsedTime().asSeconds();
+  for(auto&& [ent, shape, queue] : view2.each())
+  {
+    for(const auto& effect : queue.effects)
+    {
+      effect.apply(&shape, &shape, scene_time_seconds);
+    }
+  }
+
+  auto view3 = reg.view< ShapeAdapter >();
+  for(auto&& [ent, shape] : view3.each())
+  {
     target.draw(shape);
   }
 }

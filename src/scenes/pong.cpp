@@ -178,8 +178,8 @@ void Pong::update(const sf::Time& dt)
 
 void Pong::render(sf::RenderTarget& target)
 {
-  DebugRenderer renderer(target);
-  renderer.render(reg);
+  DebugRenderer renderer;
+  renderer.render(target, reg);
 }
 
 }

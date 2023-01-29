@@ -61,9 +61,10 @@ void Snow::make_snowflakes(int count, float screen_width)
     sf::Vector2f min_pos(0, -radius - 10.0), max_pos(screen_width, -radius);
     randomize_position(reg, ent, gen, min_pos, max_pos);
     Velocity& v = reg.get_or_emplace< Velocity >(ent, 0.f, (float)dist_velocity(gen), (float)dist_angular_velocity(gen));
-    reg.get_or_emplace< SinusoidalTransformOffset >(ent,
-      dist_sin_offset(gen),
-      dist_sin_time(gen));
+
+    auto& effects = reg.get_or_emplace< components::VisualEffectQueue >(ent);
+    effects.effects.emplace_back(components::VisualEffect::sin_offset(
+      M_PI * 13 / 27, dist_sin_offset(gen), dist_sin_time(gen)));
   }
 }
 
@@ -93,7 +94,7 @@ Snow::Snow(sf::Time snow_rate, sf::Time variance)
   background_text.setString("Merry Christmas!");
   background_text.setCharacterSize(120);
   background_text.setPosition(25, 100);
-  background_text.setColor(red);
+  background_text.setFillColor(red);
   reset_snow_timer();
 }
 
@@ -160,51 +161,12 @@ void Snow::update(const sf::Time& elapsed)
   }
 }
 
-
-
-#define RADIANS_TO_DEGREES(radians) (radians * 180.0 / M_PI)
-
-struct ShapeAdapter : public sf::Shape
-{
-  const Mesh* mesh = nullptr;
-
-  ShapeAdapter(const Transform& transform, const Material& material, const Mesh& mesh, float sine_offset, float sine_time)
-  : mesh(&mesh)
-  {
-    setPosition(transform.x + sine_offset * std::sin(sine_time), transform.y);
-    setRotation(RADIANS_TO_DEGREES(transform.radians));
-    setFillColor(material.fill_color);
-    setOutlineColor(material.outline_color);
-    setOutlineThickness(material.outline_thickness);
-    setTexture(material.texture.get(), true);
-  }
-
-  std::size_t getPointCount() const override
-  {
-    return mesh->points.size();
-  }
-
-  sf::Vector2f getPoint(std::size_t index) const override
-  {
-    return mesh->points.at(index);
-  }
-};
-
-
-
 void Snow::render(sf::RenderTarget& target)
 {
   target.clear(dark_green);
   target.draw(background_text);
 
-  const auto renderables = reg.view< const Transform, const Material, const Mesh, const SinusoidalTransformOffset >();
-
-  const float sine_value = scene_start_time.getElapsedTime().asSeconds();
-  for(const auto& [entity, transform, material, mesh, sin] : renderables.each())
-  {
-    ShapeAdapter shape(transform, material, mesh, sin.length, sine_value + sin.time_offset / 1000.0);
-    target.draw(shape);
-  }
+  renderer.render(target, reg);
 }
 
 }

@@ -3,18 +3,22 @@
 #include <SFML/Graphics.hpp>
 #include <entt/entt.hpp>
 #include "components.hpp"
+#include "components/graphical.hpp"
+
+#include <vector>
 
 namespace sg
 {
 
 class DebugRenderer
 {
-  sf::RenderTarget& target;
+  components::Material default_material;
+  sf::Clock scene_time;
 
 public:
-  DebugRenderer(sf::RenderTarget& render_target);
+  DebugRenderer();
 
-  void render(entt::registry&);
+  void render(sf::RenderTarget&, entt::registry&);
 
 };
 
