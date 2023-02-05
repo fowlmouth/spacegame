@@ -2,6 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "imgui.h"
+#include "imgui_entt_entity_editor.hpp"
+
 namespace sg::components
 {
 
@@ -13,3 +16,7 @@ struct Material
 };
 
 }
+
+template<>
+void MM::ComponentEditorWidget< sg::components::Material >(entt::registry& reg, entt::registry::entity_type entity);
+

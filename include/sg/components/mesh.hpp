@@ -4,6 +4,10 @@
 
 #include <vector>
 
+#include "imgui.h"
+#include "imgui_entt_entity_editor.hpp"
+
+
 namespace sg::components
 {
 
@@ -19,3 +23,6 @@ struct Mesh
 };
 
 }
+
+template<>
+void MM::ComponentEditorWidget< sg::components::Mesh >(entt::registry& reg, entt::registry::entity_type entity);
