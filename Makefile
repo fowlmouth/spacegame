@@ -27,9 +27,6 @@ clean:
 cleanall: clean
 	rm -f $(BIN) assets/ "$(ASSETS_TAR)"
 
-entt:
-	git submodule update --init
-
 bundle-assets:
 	tar czvf $(ASSETS_TAR) assets/
 
@@ -39,13 +36,5 @@ $(ASSETS_TAR):
 assets: $(ASSETS_TAR)
 	tar xzvf $(ASSETS_TAR)
 
-imgui.tar.gz:
-	curl -sL https://github.com/ocornut/imgui/archive/refs/tags/v1.89.2.tar.gz -o imgui.tar.gz
-
-imgui: imgui.tar.gz
-	mkdir -p imgui
-	tar xzf imgui.tar.gz --strip-components=1 -C imgui
-
-imgui-sfml:
-	mkdir -p build
-
+init: assets
+	git submodule update --init
