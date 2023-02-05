@@ -3,7 +3,7 @@
 	url = git@github.com:skypjack/entt.git
 [submodule "imgui_entt_entity_editor"]
 	path = imgui_entt_entity_editor
-	url = git@github.com:Green-Sky/imgui_entt_entity_editor.git
+	url = https://github.com/Green-Sky/imgui_entt_entity_editor.git
 [submodule "imgui"]
 	path = imgui
 	url = https://github.com/ocornut/imgui.git
