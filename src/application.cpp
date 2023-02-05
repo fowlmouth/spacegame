@@ -5,6 +5,9 @@
 
 #include "sg/hid-controller.hpp"
 
+#include "imgui.h"
+#include "imgui-SFML.h"
+
 namespace sg
 {
 
@@ -17,10 +20,12 @@ Application::Application()
 : window(sf::VideoMode(800, 600), "Space Game")
 {
   window.setVerticalSyncEnabled(true);
+  ImGui::SFML::Init(window);
 }
 
 Application::~Application()
 {
+  ImGui::SFML::Shutdown(window);
 }
 
 int Application::run()
@@ -31,6 +36,7 @@ int Application::run()
     while(window.pollEvent(event))
     {
       sg::hid::observeEvent(event);
+      ImGui::SFML::ProcessEvent(window, event);
       switch(event.type)
       {
       case sf::Event::Closed:
@@ -53,12 +59,14 @@ int Application::run()
 
     sf::Time elapsed = fps.restart();
     current_scene()->update(elapsed);
+    ImGui::SFML::Update(window, elapsed);
 
     current_scene()->post_update(*this);
     sg::hid::endFrame();
 
     window.clear(sf::Color::Black);
     current_scene()->render(window);
+    ImGui::SFML::Render(window);
     window.display();
   }
   return 0;

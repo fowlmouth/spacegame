@@ -4,6 +4,7 @@
 #include "sg/scenes/snow.hpp"
 #include "sg/scenes/pong.hpp"
 #include "sg/scenes/intro.hpp"
+#include "sg/scenes/imgui-test.hpp"
 
 #include <iostream>
 #include <libgen.h>
@@ -16,7 +17,8 @@ int main(int argc, const char** argv)
     main_scene->register_scenes<
       sg::scenes::Main,
       sg::scenes::Snow,
-      sg::scenes::Pong
+      sg::scenes::Pong,
+      sg::scenes::ImguiTest
     >();
     app.push_scene(std::make_unique< sg::scenes::Intro >(
       sf::seconds(0.2f),

@@ -1,16 +1,16 @@
-SRC := $(wildcard src/*.cpp) $(wildcard src/**/*.cpp)
+SRC := $(wildcard src/*.cpp) $(wildcard src/**/*.cpp) $(wildcard imgui/*.cpp) $(wildcard imgui-sfml/*.cpp)
 OBJ := $(SRC:.cpp=.o)
 
 BIN := spacegame
 
-CXXFLAGS := -std=c++20 -Iinclude/ -Ientt/single_include $(shell pkg-config --cflags sfml-graphics)
-LDLIBS := $(shell pkg-config --libs sfml-graphics)
+CXXFLAGS := -std=c++20 -Iinclude/ -Ientt/single_include -Iimgui/ -Iimgui-sfml/ $(shell pkg-config --cflags sfml-graphics)
+LDLIBS := $(shell pkg-config --libs sfml-graphics) -framework OpenGL
 
 ASSETS_TAR := spacegame-assets.tgz
 ASSETS_URL := "https://www.dropbox.com/s/6bjba6qzwlgs38b/spacegame-assets.tgz?dl=1"
 
 ALL: $(BIN)
-.PHONY: clean cleanall run xx
+.PHONY: debug clean cleanall run
 
 debug: CXXFLAGS += -g
 debug: $(BIN)
@@ -39,9 +39,13 @@ $(ASSETS_TAR):
 assets: $(ASSETS_TAR)
 	tar xzvf $(ASSETS_TAR)
 
-TGUI-0.9.5:
-	curl -sL https://github.com/texus/TGUI/archive/v0.9.5.zip | bsdtar -xf-
-	mkdir TGUI-0.9.5/build
-	cd TGUI-0.9.5/build
-	cmake -DCMAKE_OSX_ARCHITECTURES=arm64 ..
-	$(MAKE)
+imgui.tar.gz:
+	curl -sL https://github.com/ocornut/imgui/archive/refs/tags/v1.89.2.tar.gz -o imgui.tar.gz
+
+imgui: imgui.tar.gz
+	mkdir -p imgui
+	tar xzf imgui.tar.gz --strip-components=1 -C imgui
+
+imgui-sfml:
+	mkdir -p build
+
