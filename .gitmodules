@@ -4,3 +4,9 @@
 [submodule "imgui_entt_entity_editor"]
 	path = imgui_entt_entity_editor
 	url = git@github.com:Green-Sky/imgui_entt_entity_editor.git
+[submodule "imgui"]
+	path = imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "imgui-sfml"]
+	path = imgui-sfml
+	url = https://github.com/eliasdaler/imgui-sfml.git
