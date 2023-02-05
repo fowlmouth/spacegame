@@ -3,7 +3,7 @@ OBJ := $(SRC:.cpp=.o)
 
 BIN := spacegame
 
-CXXFLAGS := -std=c++20 -Iinclude/ -Ientt/single_include -Iimgui/ -Iimgui-sfml/ $(shell pkg-config --cflags sfml-graphics)
+CXXFLAGS := -std=c++20 -Iinclude/ -Ientt/single_include -Iimgui/ -Iimgui-sfml/ -Iimgui_entt_entity_editor/ $(shell pkg-config --cflags sfml-graphics)
 LDLIBS := $(shell pkg-config --libs sfml-graphics) -framework OpenGL
 
 ASSETS_TAR := spacegame-assets.tgz

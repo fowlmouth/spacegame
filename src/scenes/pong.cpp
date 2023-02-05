@@ -2,6 +2,14 @@
 
 #include "sg/hid-controller.hpp"
 
+template<>
+void MM::ComponentEditorWidget< sg::components::Transform >(entt::registry& reg, entt::registry::entity_type entity)
+{
+  auto& t = reg.get< sg::components::Transform >(entity);
+  ImGui::DragFlag("x##Transform", &t.x, 0.1f);
+  ImGui::DragFlag("y##Transform", &t.y, 0.1f);
+  ImGui::DragFlag("angle##Transform", &t.radians, 0.1f);
+}
 
 struct PlayerScore
 {
@@ -121,6 +129,8 @@ Pong::Pong()
 {
   auto& controller_manager = reg.ctx().emplace< PaddleControllerManager >();
   create_paddle_controller_configurations(controller_manager);
+
+  editor.registerComponent< components::Transform >("Transform");
 }
 
 void Pong::on_enter(Application& app)
@@ -180,6 +190,9 @@ void Pong::render(sf::RenderTarget& target)
 {
   DebugRenderer renderer;
   renderer.render(target, reg);
+
+  if(ball != entt::null)
+    editor.renderSimpleCombo(reg, ball);
 }
 
 }
