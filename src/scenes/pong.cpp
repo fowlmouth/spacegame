@@ -123,6 +123,9 @@ Pong::Pong()
   create_paddle_controller_configurations(controller_manager);
 
   editor.registerComponent< components::Transform >("Transform");
+  editor.registerComponent< components::Material >("Material");
+  editor.registerComponent< components::Mesh >("Mesh");
+  // editor.registerComponent< components::Transform >("Transform");
 }
 
 void Pong::on_enter(Application& app)
