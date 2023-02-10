@@ -1,6 +1,3 @@
-[submodule "entt"]
-	path = entt
-	url = git@github.com:skypjack/entt.git
 [submodule "imgui_entt_entity_editor"]
 	path = imgui_entt_entity_editor
 	url = https://github.com/Green-Sky/imgui_entt_entity_editor.git
