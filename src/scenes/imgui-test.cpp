@@ -1,4 +1,4 @@
-#include "sg/scenes/imgui-test.hpp"
+#include "imgui-test.hpp"
 
 namespace sg::scenes
 {

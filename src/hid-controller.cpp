@@ -1,4 +1,4 @@
-#include "sg/hid-controller.hpp"
+#include "hid-controller.hpp"
 
 #include <array>
 

@@ -1,6 +1,6 @@
-#include "sg/scenes/pong.hpp"
+#include "pong.hpp"
 
-#include "sg/hid-controller.hpp"
+#include "../hid-controller.hpp"
 
 
 struct PlayerScore

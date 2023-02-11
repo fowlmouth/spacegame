@@ -1,4 +1,4 @@
-#include "sg/scene.hpp"
+#include "scene.hpp"
 
 namespace sg
 {

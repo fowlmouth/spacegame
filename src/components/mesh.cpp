@@ -1,4 +1,4 @@
-#include "sg/components/mesh.hpp"
+#include "mesh.hpp"
 
 template<>
 void MM::ComponentEditorWidget< sg::components::Mesh >(entt::registry& reg, entt::registry::entity_type entity)

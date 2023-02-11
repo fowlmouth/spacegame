@@ -1,17 +1,29 @@
 SRC := $(wildcard src/*.cpp) $(wildcard src/**/*.cpp)
 OBJ := $(SRC:.cpp=.o)
 
-IMGUI_SRC := $(wildcard imgui/*.cpp) $(wildcard imgui-sfml/*.cpp)
+IMGUI_SRC := $(wildcard deps/imgui/*.cpp) $(wildcard deps/imgui-sfml/*.cpp)
 IMGUI_OBJ := $(IMGUI_SRC:.cpp=.o)
 LIBIMGUI := libimgui.a
 
 BIN := spacegame
 
-CXXFLAGS := -std=c++20 -Iinclude/ -Ientt/single_include -Iimgui/ -Iimgui-sfml/ -Iimgui_entt_entity_editor/ -DGL_SILENCE_DEPRECATION $(shell pkg-config --cflags sfml-graphics)
-LDLIBS := $(shell pkg-config --libs sfml-graphics) -framework OpenGL -L. -limgui
+CXXFLAGS := -std=c++20 -Iinclude/ -Ideps/entt/single_include -Ideps/imgui/ -Ideps/imgui-sfml/ -Ideps/imgui_entt_entity_editor/ $(shell pkg-config --cflags sfml-graphics)
+LDLIBS := $(shell pkg-config --libs sfml-graphics) -L. -limgui
 
 ASSETS_TAR := spacegame-assets.tgz
 ASSETS_URL := "https://www.dropbox.com/s/6bjba6qzwlgs38b/spacegame-assets.tgz?dl=1"
+
+ifeq ($(OS),Windows_NT)
+
+else
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S),Linux)
+		LDLIBS += -lGL
+	else ifeq ($(UNAME_S),Darwin)
+		CXXFLAGS += -DGL_SILENCE_DEPRECATION
+		LDLIBS += -framework OpenGL
+	endif
+endif
 
 ALL: $(BIN)
 .PHONY: debug clean cleanall run bundle-assets init

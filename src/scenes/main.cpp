@@ -1,5 +1,5 @@
-#include "sg/scenes/main.hpp"
-#include "sg/components.hpp"
+#include "main.hpp"
+#include "../components.hpp"
 
 #include <iostream>
 

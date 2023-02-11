@@ -1,4 +1,4 @@
-#include "sg/debug-renderer.hpp"
+#include "debug-renderer.hpp"
 
 namespace sg
 {

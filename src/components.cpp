@@ -1,4 +1,4 @@
-#include "sg/components.hpp"
+#include "components.hpp"
 
 #include <cmath>
 

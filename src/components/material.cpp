@@ -1,4 +1,4 @@
-#include "sg/components/material.hpp"
+#include "material.hpp"
 
 template<>
 void MM::ComponentEditorWidget< sg::components::Material >(entt::registry& reg, entt::registry::entity_type entity)
