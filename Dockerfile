@@ -8,7 +8,6 @@ WORKDIR /build
 ADD deps/ ./deps
 
 ADD Makefile ./
-ADD include ./include
 ADD src ./src
 
 RUN make -j"$(nproc)"

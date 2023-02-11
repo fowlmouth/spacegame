@@ -1,4 +1,4 @@
-#include "sg/ui/label.hpp"
+#include "../ui/label.hpp"
 
 #include <iostream>
 #include <math.h>

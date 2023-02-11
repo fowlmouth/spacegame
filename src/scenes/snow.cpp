@@ -1,5 +1,5 @@
-#include "sg/scenes/snow.hpp"
-#include "sg/components.hpp"
+#include "snow.hpp"
+#include "../components.hpp"
 
 #include <iostream>
 #include <cmath>

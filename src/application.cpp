@@ -1,9 +1,9 @@
-#include "sg/application.hpp"
-#include "sg/scene.hpp"
+#include "application.hpp"
+#include "scene.hpp"
 
 #include <iostream>
 
-#include "sg/hid-controller.hpp"
+#include "hid-controller.hpp"
 
 #include "imgui.h"
 #include "imgui-SFML.h"

@@ -1,4 +1,4 @@
-#include "sg/components/transform.hpp"
+#include "transform.hpp"
 
 template<>
 void MM::ComponentEditorWidget< sg::components::Transform >(entt::registry& reg, entt::registry::entity_type entity)

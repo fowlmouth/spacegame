@@ -1,8 +1,8 @@
 
-#include "sg/scenes/pick-scene.hpp"
-#include "sg/components/relationships.hpp"
+#include "pick-scene.hpp"
+#include "../components/relationships.hpp"
 
-#include "sg/ui.hpp"
+#include "../ui.hpp"
 
 #include <memory>
 

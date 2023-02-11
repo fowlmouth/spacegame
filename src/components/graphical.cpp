@@ -1,4 +1,4 @@
-#include "sg/components/graphical.hpp"
+#include "graphical.hpp"
 
 namespace sg::components
 {

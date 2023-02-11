@@ -1,10 +1,10 @@
-#include "sg/application.hpp"
-#include "sg/scenes/main.hpp"
-#include "sg/scenes/pick-scene.hpp"
-#include "sg/scenes/snow.hpp"
-#include "sg/scenes/pong.hpp"
-#include "sg/scenes/intro.hpp"
-#include "sg/scenes/imgui-test.hpp"
+#include "application.hpp"
+#include "scenes/main.hpp"
+#include "scenes/pick-scene.hpp"
+#include "scenes/snow.hpp"
+#include "scenes/pong.hpp"
+#include "scenes/intro.hpp"
+#include "scenes/imgui-test.hpp"
 
 #include <iostream>
 #include <libgen.h>

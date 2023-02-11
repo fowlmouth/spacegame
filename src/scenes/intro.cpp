@@ -1,4 +1,4 @@
-#include "sg/scenes/intro.hpp"
+#include "intro.hpp"
 
 #include <iostream>
 
