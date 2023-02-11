@@ -42,10 +42,6 @@ PickScene::PickScene()
 
 Scene::EventResponse PickScene::handle_event(const sf::Event& event)
 {
-  if(ui_root->handle_event(event) != sg::ui::Element::HandleEventResponse::NotHandled)
-  {
-    return Scene::EventResponse::Continue;
-  }
   switch(event.type)
   {
   case sf::Event::Closed:
@@ -67,7 +63,15 @@ void PickScene::update(const sf::Time&)
 
 void PickScene::render(sf::RenderTarget& target)
 {
-  ui_root->render(target);
+  ImGui::Begin("Scenes##PickScene", 0, 0);
+  for(int i = 0; i < scenes.size(); ++i)
+  {
+    if(ImGui::Button(scenes[i].name))
+    {
+      schedule_scene(scenes[i].constructor);
+    }
+  }
+  ImGui::End();
 }
 
 void PickScene::pre_update(Application&)
@@ -97,43 +101,6 @@ void PickScene::schedule_scene(PickScene::SceneConstructor constructor)
 
 void PickScene::on_enter(Application& app)
 {
-  if(!ui_style)
-  {
-    ui_style = std::make_shared< sg::ui::Style >();
-    ui_style->font = cache.font("Work-Sans/fonts/ttf/WorkSans-Regular.ttf");
-    ui_style->font_size = 24;
-    // ui_style->packing_style = UIStyle::Vertical;
-    ui_style->foreground = sf::Color::White;
-    ui_style->background = sf::Color::Transparent;
-  }
-
-  if(!ui_root)
-  {
-    auto window_size = app.get_window_size();
-
-    ui_root = std::make_shared< sg::ui::Layer >((float)window_size.x, (float)window_size.y);
-    ui_root->set_style(ui_style);
-    ui_root->update_bounds();
-
-    auto vbox = std::make_shared< sg::ui::VerticalBox >();
-    vbox->set_style(ui_style);
-    vbox->set_local_position(50,100);
-
-    ui_root->add(vbox);
-
-    float y = 0.f;
-    for(int i = 0; i < scenes.size(); ++i)
-    {
-      auto label = std::make_shared< sg::ui::Button >(scenes[i].name);
-      label->set_style(ui_style);
-      auto constructor = scenes[i].constructor;
-      label->on_click([=](sg::ui::ElementRef){
-        this->schedule_scene(constructor);
-      });
-
-      vbox->add(label);
-    }
-  }
 }
 
 

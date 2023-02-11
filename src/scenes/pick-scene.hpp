@@ -37,8 +37,6 @@ class PickScene : public Scene
   AssetCache cache;
 
   entt::registry reg;
-  sg::ui::ContainerRef ui_root;
-  sg::ui::StyleRef ui_style;
   SceneConstructor next_scene;
 
 public:
