@@ -2,8 +2,6 @@
 #include "pick-scene.hpp"
 #include "../components/relationships.hpp"
 
-#include "../ui.hpp"
-
 #include <memory>
 
 // struct UIStyle
