@@ -1,15 +1,15 @@
 [submodule "imgui_entt_entity_editor"]
-	path = imgui_entt_entity_editor
+	path = deps/imgui_entt_entity_editor
 	url = https://github.com/Green-Sky/imgui_entt_entity_editor.git
 [submodule "imgui"]
-	path = imgui
+	path = deps/imgui
 	url = https://github.com/ocornut/imgui.git
 [submodule "imgui-sfml"]
-	path = imgui-sfml
+	path = deps/imgui-sfml
 	url = https://github.com/eliasdaler/imgui-sfml.git
 [submodule "edyn"]
-	path = edyn
+	path = deps/edyn
 	url = https://github.com/xissburg/edyn.git
 [submodule "entt"]
-	path = entt
+	path = deps/entt
 	url = https://github.com/skypjack/entt.git

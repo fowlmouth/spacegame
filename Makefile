@@ -1,13 +1,13 @@
 SRC := $(wildcard src/*.cpp) $(wildcard src/**/*.cpp)
 OBJ := $(SRC:.cpp=.o)
 
-IMGUI_SRC := $(wildcard imgui/*.cpp) $(wildcard imgui-sfml/*.cpp)
+IMGUI_SRC := $(wildcard deps/imgui/*.cpp) $(wildcard deps/imgui-sfml/*.cpp)
 IMGUI_OBJ := $(IMGUI_SRC:.cpp=.o)
 LIBIMGUI := libimgui.a
 
 BIN := spacegame
 
-CXXFLAGS := -std=c++20 -Iinclude/ -Ientt/single_include -Iimgui/ -Iimgui-sfml/ -Iimgui_entt_entity_editor/ $(shell pkg-config --cflags sfml-graphics)
+CXXFLAGS := -std=c++20 -Iinclude/ -Ideps/entt/single_include -Ideps/imgui/ -Ideps/imgui-sfml/ -Ideps/imgui_entt_entity_editor/ $(shell pkg-config --cflags sfml-graphics)
 LDLIBS := $(shell pkg-config --libs sfml-graphics) -L. -limgui
 
 ASSETS_TAR := spacegame-assets.tgz
