@@ -4,38 +4,12 @@
 
 #include <memory>
 
-// struct UIStyle
-// {
-//   enum PackingStyle { Horizontal, Vertical };
-
-//   sg::AssetCache::FontRef font;
-//   int font_size;
-//   PackingStyle packing_style;
-//   sf::Color background, foreground;
-// };
-
-// struct UIClickHandler
-// {
-//   entt::any value;
-//   int(*action)(entt::registry&, entt::entity, entt::any&);
-// };
-
-struct CalculatedTransform : public sg::components::Transform
-{
-};
-
-// struct UIText
-// {
-//   std::string text;
-// };
-
 namespace sg::scenes
 {
 
 PickScene::PickScene()
 : cache("assets")
 {
-  // reg.on_construct< Transform >().connect< & entt::registry::emplace< CalculatedTransform > >();
 }
 
 Scene::EventResponse PickScene::handle_event(const sf::Event& event)
@@ -49,7 +23,8 @@ Scene::EventResponse PickScene::handle_event(const sf::Event& event)
     {
       return Scene::EventResponse::Close;
     }
-    // continue
+    return Scene::EventResponse::Continue;
+
   default:
     return Scene::EventResponse::Continue;
   }
