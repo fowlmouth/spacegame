@@ -14,6 +14,7 @@ class Application
   sf::RenderWindow window;
   sf::Clock fps;
   std::stack< std::unique_ptr< Scene >> scene_stack;
+  sf::Vector2u window_size;
 
   Scene* current_scene() const;
 

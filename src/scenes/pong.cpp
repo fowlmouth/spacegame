@@ -1,7 +1,5 @@
 #include "pong.hpp"
 
-#include "../hid-controller.hpp"
-
 
 struct PlayerScore
 {
@@ -20,8 +18,6 @@ using PaddleController = sg::hid::Controller< PaddleInputState >;
 using PaddleControllerConfiguration = sg::hid::ControllerConfiguration;
 
 using PaddleControllerManager = sg::hid::ControllerManager< PaddleInputState >;
-
-
 
 void create_paddle_controller_configurations(PaddleControllerManager& controller_manager)
 {
@@ -85,7 +81,6 @@ entt::entity create_paddle(entt::registry& reg)
   mesh.set_rectangle(sf::Vector2f(0,0), 10, 50);
 
   auto& mat = reg.get_or_emplace< Material >(ent, default_material);
-  // mat.fill_color = sf::Color::White;
 
   reg.emplace< Velocity >(ent, 0.f, 0.f, 0.f);
 
@@ -117,7 +112,7 @@ void reset_objects(entt::registry& reg, entt::entity ball,
 
 
 Pong::Pong()
-: ball(entt::null), player1(entt::null), player2(entt::null)
+: state(Pong::State::Idle), ball(entt::null), player1(entt::null), player2(entt::null)
 {
   auto& controller_manager = reg.ctx().emplace< PaddleControllerManager >();
   create_paddle_controller_configurations(controller_manager);
@@ -126,17 +121,68 @@ Pong::Pong()
   editor.registerComponent< components::Material >("Material");
   editor.registerComponent< components::Mesh >("Mesh");
   // editor.registerComponent< components::Transform >("Transform");
+
+}
+
+void Pong::destroy_ball()
+{
+  if(ball != entt::null)
+  {
+    reg.destroy(ball);
+    ball = entt::null;
+  }
+}
+
+void Pong::reset_ball(sf::Vector2f position)
+{
+  if(ball == entt::null)
+  {
+    ball = create_ball(reg);
+  }
+  reg.emplace_or_replace< Transform >(ball, position.x, position.y, 0.f);
+}
+
+void Pong::reset_score()
+{
+}
+
+void Pong::set_state(Pong::State new_state, sf::Vector2u window_size)
+{
+  std::cout << "Pong: set_state new_state= " << (int)new_state << std::endl;
+
+  switch(new_state)
+  {
+  case Pong::State::Idle:
+    destroy_ball();
+    demo_time_seconds = 3.f;
+    break;
+
+  case Pong::State::Demo:
+  {
+    // reset objects and add computer controllers
+    reset_score();
+    reset_ball();
+    reset_objects(reg, ball, player1, player2, window_size);
+
+    break;
+  }
+
+  default:
+    break;
+
+  }
+  state = new_state;
+  // reset_objects(reg, ball, player1, player2, app.get_window_size());
 }
 
 void Pong::on_enter(Application& app)
 {
-  if(ball == entt::null)
-    ball = create_ball(reg);
   if(player1 == entt::null)
     player1 = create_paddle(reg);
   if(player2 == entt::null)
     player2 = create_paddle(reg);
-  reset_objects(reg, ball, player1, player2, app.get_window_size());
+
+  set_state(Pong::State::Idle, window_size);
 
   auto& controller_manager = reg.ctx().get< PaddleControllerManager >();
   if(!controller_manager.claim(2, reg, player1))
@@ -146,8 +192,15 @@ void Pong::on_enter(Application& app)
   }
 }
 
-Scene::EventResponse Pong::handle_event(const sf::Event&)
+Scene::EventResponse Pong::handle_event(const sf::Event& event)
 {
+  if(event.type == sf::Event::KeyPressed)
+  {
+    if(event.key.code == sf::Keyboard::Key::Escape)
+    {
+      
+    }
+  }
   return Scene::EventResponse::Continue;
 }
 
@@ -155,18 +208,29 @@ void Pong::pre_update(Application& app)
 {
   auto& controller_manager = reg.ctx().get< PaddleControllerManager >();
   controller_manager.update(reg);
+
+  window_size = app.get_window_size();
 }
 
 void Pong::update(const sf::Time& dt)
 {
   auto dt_seconds = dt.asSeconds();
 
+  if(state == Pong::State::Idle)
+  {
+    demo_time_seconds -= dt_seconds;
+    if(demo_time_seconds <= 0.f)
+    {
+      set_state(Pong::State::Demo, window_size);
+    }
+  }
+
   auto input_objects = reg.view< PaddleInputState, Velocity >();
   for(auto ent : input_objects)
   {
     auto& input_state = input_objects.get< PaddleInputState >(ent);
     auto& velocity = input_objects.get< Velocity >(ent);
-    velocity.vy = input_state.vertical_move * PaddleMoveSpeed * dt_seconds;
+    velocity.vy = std::clamp(input_state.vertical_move, -1.f, 1.f) * PaddleMoveSpeed * dt_seconds;
   }
 
   auto velocity_objects = reg.view< Transform, Velocity >();

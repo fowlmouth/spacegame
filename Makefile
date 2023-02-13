@@ -38,7 +38,7 @@ run: $(BIN) assets
 	./$(BIN)
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(IMGUI_OBJ) $(LIBIMGUI)
 
 cleanall: clean
 	rm -f $(BIN) assets/ "$(ASSETS_TAR)"
