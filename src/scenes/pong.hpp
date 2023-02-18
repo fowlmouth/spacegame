@@ -17,6 +17,16 @@ namespace sg::scenes
 
 class Pong : public Scene
 {
+
+public:
+  struct PaddleInputState
+  {
+    float vertical_move;
+  };
+
+  using PaddleControllerManager = sg::hid::ControllerManager< PaddleInputState >;
+
+private:
   enum class State
   {
     Idle, Demo, Complete, Active
@@ -28,6 +38,7 @@ class Pong : public Scene
   entt::entity player1, player2, ball;
   MM::EntityEditor< entt::entity > editor;
   sf::Vector2u window_size;
+  PaddleControllerManager controller_manager;
 
   void set_state(State new_state);
   void destroy_ball();

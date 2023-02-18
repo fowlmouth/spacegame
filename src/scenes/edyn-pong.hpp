@@ -2,16 +2,22 @@
 
 #include "pick-scene.hpp"
 
-#include "imgui.h"
+#include "edyn/edyn.hpp"
 
 namespace sg::scenes
 {
 
-struct ImguiTest : Scene
+class EdynPong : Scene
 {
+
+
+public:
   static const char* SCENE_NAME;
 
-  sg::Scene::EventResponse handle_event(const sf::Event&) override;
+  EdynPong();
+
+  
+  Scene::EventResponse handle_event(const sf::Event&) override;
   void update(const sf::Time&) override;
   void render(sf::RenderTarget&) override;
 

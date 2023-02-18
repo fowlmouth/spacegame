@@ -7,21 +7,15 @@ struct PlayerScore
   int score;
 };
 
-struct PaddleInputState
-{
-  float vertical_move;
-};
-
 static constexpr float DEMO_TIME_SECONDS = 1.5f;
 static constexpr float PONGBALL_SPEED = 97.5f;
 
 constexpr int PaddleMoveSpeed = 10000.f;
 
-using HumanController = sg::hid::Controller< PaddleInputState >;
+using HumanController = sg::hid::Controller< sg::scenes::Pong::PaddleInputState >;
 
 using PaddleControllerConfiguration = sg::hid::ControllerConfiguration;
 
-using PaddleControllerManager = sg::hid::ControllerManager< PaddleInputState >;
 
 // Entity controlled by computer logic
 struct ComputerController
@@ -43,7 +37,9 @@ struct GoalLine
 {
 };
 
-void create_paddle_controller_configurations(PaddleControllerManager& controller_manager)
+using Pong = sg::scenes::Pong;
+
+void create_paddle_controller_configurations(Pong::PaddleControllerManager& controller_manager)
 {
   {
     auto kbd = std::make_shared< PaddleControllerConfiguration >(2);
@@ -51,14 +47,14 @@ void create_paddle_controller_configurations(PaddleControllerManager& controller
     auto& btn1 = kbd->actions.at(0);
     btn1.button = sg::hid::Button{ sg::hid::Button::Key, sf::Keyboard::Key::Up };
     btn1.type = sg::hid::ButtonValueMapper::BoolToLowFloat;
-    btn1.offset = offsetof(PaddleInputState, vertical_move);
+    btn1.offset = offsetof(Pong::PaddleInputState, vertical_move);
 
     auto& btn2 = kbd->actions.at(1);
     btn2.button = sg::hid::Button{ sg::hid::Button::Key, sf::Keyboard::Key::Down };
     btn2.type = sg::hid::ButtonValueMapper::BoolToHighFloat;
-    btn2.offset = offsetof(PaddleInputState, vertical_move);
+    btn2.offset = offsetof(Pong::PaddleInputState, vertical_move);
 
-    controller_manager.controllers.push_back(PaddleControllerManager::EntityController{ "Keyboard Right", entt::null, kbd });
+    controller_manager.controllers.push_back(Pong::PaddleControllerManager::EntityController{ "Keyboard Right", entt::null, kbd });
   }
   {
     auto kbd = std::make_shared< PaddleControllerConfiguration >(2);
@@ -66,14 +62,14 @@ void create_paddle_controller_configurations(PaddleControllerManager& controller
     auto& btn1 = kbd->actions.at(0);
     btn1.button = sg::hid::Button{ sg::hid::Button::Key, sf::Keyboard::Key::Up };
     btn1.type = sg::hid::ButtonValueMapper::BoolToLowFloat;
-    btn1.offset = offsetof(PaddleInputState, vertical_move);
+    btn1.offset = offsetof(Pong::PaddleInputState, vertical_move);
 
     auto& btn2 = kbd->actions.at(1);
     btn2.button = sg::hid::Button{ sg::hid::Button::Key, sf::Keyboard::Key::Down };
     btn2.type = sg::hid::ButtonValueMapper::BoolToHighFloat;
-    btn2.offset = offsetof(PaddleInputState, vertical_move);
+    btn2.offset = offsetof(Pong::PaddleInputState, vertical_move);
 
-    controller_manager.controllers.push_back(PaddleControllerManager::EntityController{ "Keyboard Left", entt::null, kbd });
+    controller_manager.controllers.push_back(Pong::PaddleControllerManager::EntityController{ "Keyboard Left", entt::null, kbd });
   }
   {
     auto mwheel = std::make_shared< PaddleControllerConfiguration >(1);
@@ -81,9 +77,9 @@ void create_paddle_controller_configurations(PaddleControllerManager& controller
     auto& btn1 = mwheel->actions.at(0);
     btn1.button = sg::hid::Button{ sg::hid::Button::MouseWheel, sf::Mouse::Wheel::VerticalWheel };
     btn1.type = sg::hid::ButtonValueMapper::Float;
-    btn1.offset = offsetof(PaddleInputState, vertical_move);
+    btn1.offset = offsetof(Pong::PaddleInputState, vertical_move);
 
-    controller_manager.controllers.push_back(PaddleControllerManager::EntityController{ "MouseWheel", entt::null, mwheel });
+    controller_manager.controllers.push_back(Pong::PaddleControllerManager::EntityController{ "MouseWheel", entt::null, mwheel });
   }
 }
 
@@ -131,7 +127,6 @@ entt::entity create_ball(entt::registry& reg)
 Pong::Pong()
 : state(Pong::State::Idle), ball(entt::null), player1(entt::null), player2(entt::null)
 {
-  auto& controller_manager = reg.ctx().emplace< PaddleControllerManager >();
   create_paddle_controller_configurations(controller_manager);
 
   editor.registerComponent< components::Transform >("Transform");
@@ -228,7 +223,6 @@ void Pong::on_enter(Application& app)
   window_size = app.get_window_size();
   set_state(Pong::State::Demo);
 
-  auto& controller_manager = reg.ctx().get< PaddleControllerManager >();
   if(!controller_manager.claim(2, reg, player1))
   {
     std::cout << "Failed to claim a controller" << std::endl;
@@ -250,7 +244,6 @@ Scene::EventResponse Pong::handle_event(const sf::Event& event)
 
 void Pong::pre_update(Application& app)
 {
-  auto& controller_manager = reg.ctx().get< PaddleControllerManager >();
   controller_manager.update(reg);
 
   if(ball != entt::null)

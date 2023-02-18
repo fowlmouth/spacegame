@@ -15,13 +15,9 @@
 namespace sg::scenes
 {
 
-class PickableScene : public Scene
-{
-};
-
 class PickScene : public Scene
 {
-  using SceneConstructor = std::function< PickableScene*() >;
+  using SceneConstructor = std::function< Scene*() >;
 
   struct PickSceneRecord
   {
@@ -44,7 +40,7 @@ public:
   template< typename SceneType >
   void register_scene_type(const char* name)
   {
-    scenes.push_back({ name, [](){ return (PickableScene*)new SceneType(); }});
+    scenes.push_back({ name, [](){ return (Scene*)new SceneType(); }});
   }
 
   template< typename... Scenes >

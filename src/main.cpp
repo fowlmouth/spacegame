@@ -3,6 +3,7 @@
 #include "scenes/pick-scene.hpp"
 #include "scenes/snow.hpp"
 #include "scenes/pong.hpp"
+#include "scenes/edyn-pong.hpp"
 #include "scenes/intro.hpp"
 #include "scenes/imgui-test.hpp"
 
@@ -19,6 +20,7 @@ int main(int argc, const char** argv)
       sg::scenes::Main,
       sg::scenes::Snow,
       sg::scenes::Pong,
+      sg::scenes::EdynPong,
       sg::scenes::ImguiTest
     >();
     app.push_scene(std::make_unique< sg::scenes::Intro >(
