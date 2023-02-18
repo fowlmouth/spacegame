@@ -1,23 +1,30 @@
 #include "pong.hpp"
 
+// Components
 
 struct PlayerScore
 {
   int score;
 };
 
-
 struct PaddleInputState
 {
   float vertical_move;
 };
 
+static constexpr float DEMO_TIME_SECONDS = 1.5f;
+
 constexpr int PaddleMoveSpeed = 10000.f;
 
-using PaddleController = sg::hid::Controller< PaddleInputState >;
+using HumanController = sg::hid::Controller< PaddleInputState >;
+
 using PaddleControllerConfiguration = sg::hid::ControllerConfiguration;
 
 using PaddleControllerManager = sg::hid::ControllerManager< PaddleInputState >;
+
+struct ComputerController
+{
+};
 
 void create_paddle_controller_configurations(PaddleControllerManager& controller_manager)
 {
@@ -95,19 +102,8 @@ entt::entity create_ball(entt::registry& reg)
   mesh.set_circle(sf::Vector2f(0,0), 16, 5.f);
 
   auto& mat = reg.get_or_emplace< Material >(ent, default_material);
-  // mat.fill_color = sf::Color::White;
 
   return ent;
-}
-
-void reset_objects(entt::registry& reg, entt::entity ball,
-  entt::entity player1, entt::entity player2, sf::Vector2u screen_size)
-{
-  reg.emplace_or_replace< Transform >(ball, (float)(screen_size.x/2), (float)(screen_size.y/2), 0.f);
-  reg.emplace_or_replace< Transform >(player1,
-    5.f, (float)(screen_size.y/2), 0.f);
-  reg.emplace_or_replace< Transform >(player2,
-    (float)(screen_size.x) - 5.f, (float)(screen_size.y/2), 0.f);
 }
 
 
@@ -133,20 +129,48 @@ void Pong::destroy_ball()
   }
 }
 
-void Pong::reset_ball(sf::Vector2f position)
+sf::Vector2f ball_directions[4] = {
+  { 1.f,  1.f},
+  {-1.f,  1.f},
+  {-1.f, -1.f},
+  { 1.f, -1.f}
+};
+
+void Pong::reset_ball()
 {
   if(ball == entt::null)
   {
     ball = create_ball(reg);
   }
-  reg.emplace_or_replace< Transform >(ball, position.x, position.y, 0.f);
+  auto& transform = reg.emplace_or_replace< Transform >(ball, (float)(window_size.x)/2, (float)(window_size.y)/2, 0.f);
+  auto pos = ball_directions[ rand() & 0b11 ];
+  auto& velocity = reg.emplace_or_replace< Velocity >(ball, pos.x, pos.y, 0.f);
 }
 
 void Pong::reset_score()
 {
 }
 
-void Pong::set_state(Pong::State new_state, sf::Vector2u window_size)
+void Pong::reset_paddles()
+{
+  if(player1 == entt::null)
+    player1 = create_paddle(reg);
+  if(player2 == entt::null)
+    player2 = create_paddle(reg);
+
+  reg.emplace_or_replace< Transform >(player1,
+    5.f, (float)(window_size.y)/2, 0.f);
+  reg.emplace_or_replace< Transform >(player2,
+    (float)(window_size.x) - 5.f, (float)(window_size.y)/2, 0.f);
+}
+
+void Pong::set_computer_controller(entt::entity paddle)
+{
+  reg.remove< HumanController >(paddle);
+  reg.emplace< ComputerController >(paddle);
+}
+
+void Pong::set_state(Pong::State new_state)
 {
   std::cout << "Pong: set_state new_state= " << (int)new_state << std::endl;
 
@@ -154,7 +178,7 @@ void Pong::set_state(Pong::State new_state, sf::Vector2u window_size)
   {
   case Pong::State::Idle:
     destroy_ball();
-    demo_time_seconds = 3.f;
+    demo_time_seconds = DEMO_TIME_SECONDS;
     break;
 
   case Pong::State::Demo:
@@ -162,7 +186,9 @@ void Pong::set_state(Pong::State new_state, sf::Vector2u window_size)
     // reset objects and add computer controllers
     reset_score();
     reset_ball();
-    reset_objects(reg, ball, player1, player2, window_size);
+    reset_paddles();
+    set_computer_controller(player1);
+    set_computer_controller(player2);
 
     break;
   }
@@ -177,12 +203,8 @@ void Pong::set_state(Pong::State new_state, sf::Vector2u window_size)
 
 void Pong::on_enter(Application& app)
 {
-  if(player1 == entt::null)
-    player1 = create_paddle(reg);
-  if(player2 == entt::null)
-    player2 = create_paddle(reg);
-
-  set_state(Pong::State::Idle, window_size);
+  window_size = app.get_window_size();
+  set_state(Pong::State::Demo);
 
   auto& controller_manager = reg.ctx().get< PaddleControllerManager >();
   if(!controller_manager.claim(2, reg, player1))
@@ -198,7 +220,7 @@ Scene::EventResponse Pong::handle_event(const sf::Event& event)
   {
     if(event.key.code == sf::Keyboard::Key::Escape)
     {
-      
+      return Scene::EventResponse::Close;
     }
   }
   return Scene::EventResponse::Continue;
@@ -208,6 +230,27 @@ void Pong::pre_update(Application& app)
 {
   auto& controller_manager = reg.ctx().get< PaddleControllerManager >();
   controller_manager.update(reg);
+
+  if(ball != entt::null)
+  {
+    auto ball_position = reg.get< components::Transform >(ball);
+
+    auto computer_controllers = reg.view< ComputerController, Transform, PaddleInputState >();
+    for(auto ent : computer_controllers)
+    {
+      auto& transform = computer_controllers.get< Transform >(ent);
+      auto& input_state = computer_controllers.get< PaddleInputState >(ent);
+
+      if(ball_position.y > transform.y)
+      {
+        input_state.vertical_move = 1.f;
+      }
+      else if(ball_position.y < transform.y)
+      {
+        input_state.vertical_move = -1.f;
+      }
+    }
+  }
 
   window_size = app.get_window_size();
 }
@@ -221,7 +264,7 @@ void Pong::update(const sf::Time& dt)
     demo_time_seconds -= dt_seconds;
     if(demo_time_seconds <= 0.f)
     {
-      set_state(Pong::State::Demo, window_size);
+      set_state(Pong::State::Demo);
     }
   }
 
@@ -250,8 +293,8 @@ void Pong::render(sf::RenderTarget& target)
   DebugRenderer renderer;
   renderer.render(target, reg);
 
-  if(ball != entt::null)
-    editor.renderSimpleCombo(reg, ball);
+  // if(ball != entt::null)
+  //   editor.renderSimpleCombo(reg, ball);
 }
 
 }

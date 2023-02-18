@@ -84,6 +84,19 @@ struct ControllerManager
 
   std::vector< EntityController > controllers;
 
+  void release(int id, entt::registry& reg)
+  {
+    claim(id, reg, entt::null);
+  }
+
+  void clear(entt::registry& reg)
+  {
+    for(int i = 0; i < controllers.size(); ++i)
+    {
+      release(i, reg);
+    }
+  }
+
   bool claim(int id, entt::registry& reg, entt::entity new_entity)
   {
     if(id < 0 || id >= controllers.size()) return false;

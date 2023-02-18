@@ -11,6 +11,7 @@
 
 int main(int argc, const char** argv)
 {
+  srand(time(NULL));
   sg::Application app;
   {
     auto main_scene = std::make_unique< sg::scenes::PickScene >();

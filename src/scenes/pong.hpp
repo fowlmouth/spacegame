@@ -29,11 +29,14 @@ class Pong : public Scene
   MM::EntityEditor< entt::entity > editor;
   sf::Vector2u window_size;
 
-  void set_state(State new_state, sf::Vector2u window_size);
+  void set_state(State new_state);
   void destroy_ball();
 
-  void reset_ball(sf::Vector2f position);
+  void reset_ball();
   void reset_score();
+  void reset_paddles();
+
+  void set_computer_controller(entt::entity);
 
 public:
   static const char* SCENE_NAME;
