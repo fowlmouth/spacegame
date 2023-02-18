@@ -189,6 +189,7 @@ void Pong::set_computer_controller(entt::entity paddle)
 {
   reg.remove< HumanController >(paddle);
   reg.emplace< ComputerController >(paddle);
+  reg.emplace_or_replace< PaddleInputState >(paddle);
 }
 
 void Pong::set_state(Pong::State new_state)
