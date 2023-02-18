@@ -13,6 +13,7 @@ struct PaddleInputState
 };
 
 static constexpr float DEMO_TIME_SECONDS = 1.5f;
+static constexpr float PONGBALL_SPEED = 97.5f;
 
 constexpr int PaddleMoveSpeed = 10000.f;
 
@@ -143,7 +144,7 @@ void Pong::reset_ball()
     ball = create_ball(reg);
   }
   auto& transform = reg.emplace_or_replace< Transform >(ball, (float)(window_size.x)/2, (float)(window_size.y)/2, 0.f);
-  auto pos = ball_directions[ rand() & 0b11 ];
+  auto pos = PONGBALL_SPEED * ball_directions[ rand() & 0b11 ];
   auto& velocity = reg.emplace_or_replace< Velocity >(ball, pos.x, pos.y, 0.f);
 }
 
