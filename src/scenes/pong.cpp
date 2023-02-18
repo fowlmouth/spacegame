@@ -23,7 +23,23 @@ using PaddleControllerConfiguration = sg::hid::ControllerConfiguration;
 
 using PaddleControllerManager = sg::hid::ControllerManager< PaddleInputState >;
 
+// Entity controlled by computer logic
 struct ComputerController
+{
+};
+
+// Component-tag for the ball
+struct PongBall
+{
+};
+
+// Entity should be constrained to the bounds of the screen
+struct ScreenBound
+{
+};
+
+// Checked for collision against balls to see if points need to be awarded
+struct GoalLine
 {
 };
 
@@ -92,6 +108,8 @@ entt::entity create_paddle(entt::registry& reg)
 
   reg.emplace< Velocity >(ent, 0.f, 0.f, 0.f);
 
+  reg.emplace< ScreenBound >(ent);
+
   return ent;
 }
 
@@ -103,6 +121,8 @@ entt::entity create_ball(entt::registry& reg)
   mesh.set_circle(sf::Vector2f(0,0), 16, 5.f);
 
   auto& mat = reg.get_or_emplace< Material >(ent, default_material);
+
+  reg.emplace< ScreenBound >(ent);
 
   return ent;
 }
@@ -266,6 +286,21 @@ void Pong::update(const sf::Time& dt)
     if(demo_time_seconds <= 0.f)
     {
       set_state(Pong::State::Demo);
+    }
+  }
+
+  auto bound_objects = reg.view< ScreenBound, Transform >();
+  for(auto ent : bound_objects)
+  {
+    auto& transform = bound_objects.get< Transform >(ent);
+    auto velocity = reg.try_get< Velocity >(ent);
+    if(transform.y < 0)
+    {
+      std::cout << "ent " << (int)ent << " upper bounds!" << std::endl;
+    }
+    else if(transform.y > window_size.y)
+    {
+      std::cout << "ent " << (int)ent << " lower bounds!" << std::endl;
     }
   }
 
