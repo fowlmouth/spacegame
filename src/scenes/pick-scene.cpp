@@ -56,7 +56,7 @@ void PickScene::post_update(Application& app)
 {
   if(next_scene)
   {
-    PickableScene* scene = next_scene();
+    Scene* scene = next_scene();
     next_scene = nullptr;
     if(scene)
     {
